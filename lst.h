@@ -17,4 +17,8 @@ struct lst {
 	dtor_t dtor;
 };
 
+void lst_init(struct lst *lst, dtor_t dtor);
+void lst_psh_bk(struct lst *lst, void *data);
+void lst_insr(struct lst *lst, struct lst_node *pos, void *data);
+
 #endif
