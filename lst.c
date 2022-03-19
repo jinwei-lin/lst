@@ -2,37 +2,58 @@
 
 void lst_init(struct lst *lst, dtor_t dtor) {
 	lst->head = NULL;
+	lst->tail = NULL;
 	lst->cnt = 0;
 	lst->dtor = dtor;
 }
 
 void lst_psh_bk(struct lst *lst, void *data) {
 	struct lst_node *node = malloc(sizeof(struct lst_node)),
-			*head = lst->head;
+			*tail = lst->tail;
 
 	node->data = data;
-	if(head == NULL) {
-		node->prev = node;
-		node->nxt = node;
+	node->nxt = NULL;
+	if(tail == NULL) { // List is empty.
+		node->prev = NULL;
 		lst->head = node;
+		lst->tail = node;
 	} else {
-		node->prev = head->prev;
-		node->nxt = head;
-		head->prev->nxt = node;
-		head->prev = node;
+		node->prev = tail;
+		tail->nxt = node;
+		lst->tail = node;
 	}
 	lst->cnt += 1;
 }
 
 void lst_insr(struct lst *lst, struct lst_node *pos, void *data) {
-	struct lst_node *node = malloc(sizeof(struct lst_node));
+	struct lst_node *node = malloc(sizeof(struct lst_node)),
+			*prev = pos->prev;
 
 	node->data = data;
-	node->prev = pos->prev;
+	node->prev = prev;
 	node->nxt = pos;
-	pos->prev->nxt = node;
 	pos->prev = node;
-	lst->cnt += 1;
-	if(lst->head == pos)
+	if(prev != NULL)
+		prev->nxt = node;
+	else // Element is inserted at the head.
 		lst->head = node;
+	lst->cnt += 1;
+}
+
+struct lst_node* lst_del(struct lst *lst, struct lst_node *pos) {
+	struct lst_node *prev = pos->prev,
+			*nxt = pos->nxt;
+
+	if(prev != NULL)
+		prev->nxt = nxt;
+	else // Head element is deleted.
+		lst->head = nxt;
+	if(nxt != NULL)
+		nxt->prev = prev;
+	else // Tail element is deleted.
+		lst->tail = prev;
+	lst->dtor(pos->data);
+	free(pos);
+	lst->cnt -= 1;
+	return nxt;
 }
