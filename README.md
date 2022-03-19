@@ -71,3 +71,9 @@ struct lst_node* lst_del(struct lst *lst, struct lst_node *pos);
 Delete an element from a linked list.
 
 Pointer to the linked-list node following the deleted one is returned. If the last node is deleted, `NULL` is returned.
+
+```
+void lst_fnl(struct lst *lst);
+```
+
+Thoroughly clear a linked list, including all its elements.

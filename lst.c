@@ -57,3 +57,15 @@ struct lst_node* lst_del(struct lst *lst, struct lst_node *pos) {
 	lst->cnt -= 1;
 	return nxt;
 }
+
+void lst_fnl(struct lst *lst) {
+	struct lst_node *cur, *nxt;
+	dtor_t dtor = lst->dtor;
+
+	for(cur = lst->head; cur != NULL; cur = nxt) {
+		nxt = cur->nxt;
+		dtor(cur->data);
+		free(cur);
+	}
+	memset(lst, 0, sizeof(struct lst));
+}

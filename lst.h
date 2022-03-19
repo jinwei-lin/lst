@@ -2,6 +2,7 @@
 #define LST_H
 
 #include <stdlib.h>
+#include <string.h>
 
 typedef void (*dtor_t)(void*);
 
@@ -22,5 +23,6 @@ void lst_init(struct lst *lst, dtor_t dtor);
 void lst_psh_bk(struct lst *lst, void *data);
 void lst_insr(struct lst *lst, struct lst_node *pos, void *data);
 struct lst_node* lst_del(struct lst *lst, struct lst_node *pos);
+void lst_fnl(struct lst *lst);
 
 #endif
